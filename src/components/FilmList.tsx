@@ -1,45 +1,70 @@
 import "./FilmList.css"
-import {useEffect, useState} from "react";
-import type {MovieType} from "../types/movie-type.ts";
+import {useEffect, useMemo, useRef, useState} from "react";
+import type {MovieType, OutputMovieType} from "../types/movie-type.ts";
 import {getFilms} from "../service/film-service.ts";
 import Film from "./Film.tsx";
 
 
 const FilmList = () => {
     const [movies, setMovies] = useState<MovieType[]>([]);
+    const [search, setSearch] = useState<string>("");
+    const [favourites, setFavourites] = useState<OutputMovieType[]>([])
+    const inputRef = useRef<HTMLInputElement | null>(null);
+
 
     useEffect(() => {
         (async () => {
-            setMovies(await getFilms())
+            setMovies(await getFilms());
         })();
-
+        inputRef.current?.focus();
     }, []);
 
+    const filteredMovies = useMemo(() => {
+        if (!search) return movies;
+
+        return movies.filter((movie: MovieType) => {
+            return movie.title.toLowerCase().includes(search.toLowerCase());
+        })
+    }, [search, movies]);
+
+    const addFavourite = (movie: OutputMovieType) => {
+        if (!favourites.find(f => f.id === movie.id)) {
+            setFavourites((prev) => [...prev, movie]);
+        }
+
+    }
+
     return (
-        <>
+        <div className="filmlist">
             <header>
-                <h1>Filmek</h1>
-                <input type="search" name="" id="" placeholder="Film címe"/>
-                <h3>Kedvenc filmek száma: </h3>
+                <input
+                    onChange={e => setSearch(e.target.value)}
+                    type="search"
+                    value={search}
+                    name="" id=""
+                    ref={inputRef}
+                    placeholder="Film címe"
+                />
+                <h3>Kedvenc filmek száma: {0}</h3>
             </header>
 
             <main>
-                {movies.length &&
-                    movies.map(movie => (
+                {filteredMovies.length &&
+                    filteredMovies.map(movie => (
                         <Film
-                            /*id={movie.id}
-                            title={movie.title}
-                            genre={movie.genre}
-                            year={movie.year}
-                            description={movie.description}
-                            rating={movie.rating}
-                            key={movie.id}*/
                             {...movie}
+                            addFavourite={addFavourite}
+                            key={movie.id}
                         />
                     ))
                 }
+
             </main>
-        </>
+
+            {favourites.map(movie => (
+                <div>{movie.title}</div>
+            ))}
+        </div>
     );
 };
 

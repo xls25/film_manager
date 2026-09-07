@@ -1,0 +1,33 @@
+.filmlist {
+    header {
+        display: flex;
+        flex-direction: column;
+        color: white;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 2rem;
+
+        input {
+            padding: 10px;
+            border-radius: 10px;
+            border: none;
+            background: rgb(128 128 128 / 0.65);
+            color: #ffffff;
+
+            &::placeholder {
+                color: #ccc9c9;
+            }
+        }
+
+    }
+
+    main {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 2rem;
+        width: 100%;
+    }
+}
+

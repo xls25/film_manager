@@ -1,0 +1,21 @@
+article {
+    background: #345353;
+    color: white;
+    border-radius: 10px;
+    width: 20rem;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: space-evenly;
+
+    button {
+        border-radius: 10px;
+        padding: 10px;
+        font-weight: bold !important;
+        cursor: pointer;
+        color: #163d4c;
+        background: #9bbdbd;
+        border: none;
+    }
+}
